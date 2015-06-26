@@ -23,7 +23,7 @@ defmodule Gameoflife.Supervisor do
   defp create_world(width, height) do
     seed_random
     for x <- 1..width, y <- 1..height do
-      starts_alive? = :random.uniform(75) == 1
+      starts_alive? = :random.uniform(55) == 1
       Supervisor.start_child(__MODULE__, [x, y, starts_alive?, [name: :"#{x},#{y}"]])
     end
   end
@@ -34,7 +34,7 @@ defmodule Gameoflife.Supervisor do
   end
 
   defp print(values) do
-    board = (for _ <- 1..20, do: '                    ') |> Enum.to_list
+    board = (for _ <- 1..20, do: '                              ') |> Enum.to_list
 
     Enum.reduce(values, board, fn {x, y, alive?}, acc ->
       List.update_at(acc, y, fn row -> List.update_at(row, x, fn _ ->
