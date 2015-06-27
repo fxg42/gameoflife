@@ -19,6 +19,10 @@ defmodule Gameoflife.Cell do
     {:reply, state.alive?, state}
   end
 
+  def handle_call(:live, _from, state) do
+    {:reply, :ok, %{state | alive?: true}}
+  end
+
   def handle_call(:prepare, _from, state) do
     alive_neighbour_count = state.neighbours
     |> Enum.map(&Task.async(GenServer, :call, [&1, :alive?]))
@@ -53,8 +57,9 @@ defmodule Gameoflife.Cell do
   defp wrap(pos, width) when pos > width, do: 1
   defp wrap(pos, _width), do: pos
 
+  defp will_be_alive?(true, alive_neighbour_count) when alive_neighbour_count < 2, do: false
+  defp will_be_alive?(true, alive_neighbour_count) when alive_neighbour_count < 4, do: true
+  defp will_be_alive?(true, alive_neighbour_count) when alive_neighbour_count >= 4, do: false
   defp will_be_alive?(false, 3), do: true
-  defp will_be_alive?(_alive?, alive_neighbour_count) when alive_neighbour_count < 2, do: false
-  defp will_be_alive?(_alive?, alive_neighbour_count) when alive_neighbour_count < 4, do: true
-  defp will_be_alive?(_alive?, _alive_neighbour_count), do: false
+  defp will_be_alive?(alive?, _), do: alive?
 end

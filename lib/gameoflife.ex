@@ -7,6 +7,13 @@ defmodule Gameoflife do
 
     {:ok, pid} = Gameoflife.Supervisor.start_link(dimensions)
 
+    # glider
+    # GenServer.call(:"10,10", :live)
+    # GenServer.call(:"11,10", :live)
+    # GenServer.call(:"12,10", :live)
+    # GenServer.call(:"12,9", :live)
+    # GenServer.call(:"11,8", :live)
+
     Gameoflife.Supervisor.step(event_manager)
 
     {:ok, pid}

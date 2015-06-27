@@ -12,7 +12,7 @@ defmodule Gameoflife.Supervisor do
     cells |> Enum.map(&GenServer.call(&1, :prepare))
     cell_values = cells |> Enum.map(&GenServer.call(&1, :commit))
 
-    GenEvent.sync_notify(event_manager, {:cells, cell_values})
+    GenEvent.notify(event_manager, {:cells, cell_values})
     step(event_manager)
   end
 
@@ -26,7 +26,7 @@ defmodule Gameoflife.Supervisor do
   defp create_world(width, height) do
     seed_random
     for x <- 1..width, y <- 1..height do
-      starts_alive? = :random.uniform(100) < 2
+      starts_alive? = :random.uniform(100) < 50
       Supervisor.start_child(__MODULE__, [{x, y, starts_alive?, width, height}, [name: :"#{x},#{y}"]])
     end
   end
