@@ -49,7 +49,7 @@ defmodule Gameoflife.Cell do
     |> Enum.to_list()
   end
 
-  defp wrap(pos, width) when pos == 0, do: width
+  defp wrap(0, width), do: width
   defp wrap(pos, width) when pos > width, do: 1
   defp wrap(pos, _width), do: pos
 
