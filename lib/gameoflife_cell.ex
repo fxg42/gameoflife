@@ -1,14 +1,14 @@
 defmodule Gameoflife.Cell do
   use GenServer
- 
+
   defstruct x: nil, y: nil, alive?: nil, neighbours: [], will_be_alive?: nil
 
-  def start_link(x, y, starts_alive?, opts) do
-    GenServer.start_link(__MODULE__, [x, y, starts_alive?], opts)
+  def start_link(x, y, starts_alive?, width, height, opts) do
+    GenServer.start_link(__MODULE__, [x, y, starts_alive?, width, height], opts)
   end
 
-  def init([x, y, starts_alive?]) do
-    {:ok, %Gameoflife.Cell{x: x, y: y, alive?: starts_alive?, neighbours: find_neighbours(x, y, 20, 20)}}
+  def init([x, y, starts_alive?, width, height]) do
+    {:ok, %Gameoflife.Cell{x: x, y: y, alive?: starts_alive?, neighbours: find_neighbours(x, y, width, height)}}
   end
 
   def handle_call(:alive?, _from, state) do
@@ -52,5 +52,5 @@ defmodule Gameoflife.Cell do
   defp will_be_alive?(false, 3), do: true
   defp will_be_alive?(_alive?, alive_neighbour_count) when alive_neighbour_count < 2, do: false
   defp will_be_alive?(_alive?, alive_neighbour_count) when alive_neighbour_count < 4, do: true
-  defp will_be_alive?(_alive?, alive_neighbour_count) when alive_neighbour_count >= 4, do: false
+  defp will_be_alive?(_alive?, _alive_neighbour_count), do: false
 end
