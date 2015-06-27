@@ -1,9 +1,9 @@
 defmodule Gameoflife.Supervisor do
   use Supervisor
 
-  def start_link({width, height}) do
+  def start_link({width, height}, mode) do
     result = Supervisor.start_link(__MODULE__, :ok, name: __MODULE__)
-    create_world(width, height)
+    create_world(width, height, mode)
     result
   end
 
@@ -23,10 +23,10 @@ defmodule Gameoflife.Supervisor do
     supervise(children, strategy: :simple_one_for_one)
   end
 
-  defp create_world(width, height) do
+  defp create_world(width, height, mode) do
     seed_random
     for x <- 1..width, y <- 1..height do
-      starts_alive? = :random.uniform(100) < 50
+      starts_alive? = if mode == :random, do: :random.uniform(100) < 50, else: false
       Supervisor.start_child(__MODULE__, [{x, y, starts_alive?, width, height}, [name: :"#{x},#{y}"]])
     end
   end
