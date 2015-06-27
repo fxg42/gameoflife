@@ -3,12 +3,16 @@ defmodule Gameoflife.Cell do
 
   defstruct x: nil, y: nil, alive?: nil, neighbours: [], will_be_alive?: nil
 
-  def start_link(x, y, starts_alive?, width, height, opts) do
-    GenServer.start_link(__MODULE__, [x, y, starts_alive?, width, height], opts)
+  def start_link(initial_state, opts) do
+    GenServer.start_link(__MODULE__, [initial_state], opts)
   end
 
-  def init([x, y, starts_alive?, width, height]) do
-    {:ok, %Gameoflife.Cell{x: x, y: y, alive?: starts_alive?, neighbours: find_neighbours(x, y, width, height)}}
+  def init([{x, y, starts_alive?, width, height}]) do
+    {:ok, %Gameoflife.Cell{
+        x: x, y: y,
+        alive?: starts_alive?,
+        neighbours: find_neighbours(x, y, width, height)
+    }}
   end
 
   def handle_call(:alive?, _from, state) do
