@@ -25,9 +25,9 @@ defmodule Gameoflife.Cell do
 
   def handle_call(:prepare, _from, state) do
     alive_neighbour_count = state.neighbours
-    |> Enum.map(&Task.async(GenServer, :call, [&1, :alive?]))
-    |> Enum.map(&Task.await/1)
-    |> Enum.filter(&(&1))
+    |> Stream.map(&GenServer.call(&1, :alive?))
+    |> Stream.filter(&(&1))
+    |> Enum.to_list
     |> length
 
     {:reply, :ok, %{state | will_be_alive?: will_be_alive?(state.alive?, alive_neighbour_count) }}
