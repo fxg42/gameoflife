@@ -12,7 +12,7 @@ defmodule Gameoflife.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger], mod: {Gameoflife, [{30, 20}, :random]}]
+    [applications: [:logger], mod: {Gameoflife, [{40, 15}, :random]}]
   end
 
   # Dependencies can be Hex packages:
